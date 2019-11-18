@@ -3,7 +3,7 @@ var exploredTiles
 
 //Retreiving explored tiles array on page startup
 if (localStorage.getItem("exploredtiles") === null) {
-    exploredTiles = [{"blockID": [0,0], "content": "assets/playermodel.png"}]
+    exploredTiles = []
 }
 if (localStorage.getItem("exploredtiles") !== null) {
     exploredTiles = JSON.parse(localStorage.getItem("exploredtiles"))
@@ -46,6 +46,7 @@ function renderGrid() {
             //Player Model
             if (x===7 && y===7) {
                 var tileImg = document.createElement("img")
+                targetBlock.innerHTML = ""
                 tileImg.setAttribute("src", "assets/playermodel.png")
                 tileImg.setAttribute("class", "tileimg")
                 targetBlock.appendChild(tileImg)
@@ -70,7 +71,6 @@ function renderGrid() {
                             var xCoordinateCurrent = y[0]
                             var yCoordinateCurrent = y[1]
                             if (xCoordinate === xCoordinateCurrent && yCoordinate === yCoordinateCurrent) {
-                                console.log("line73conditional")
                                 return index
                             }
                             else {
@@ -78,6 +78,7 @@ function renderGrid() {
                             }
                         }
                     }
+                    targetBlock.innerHTML = ""
                     tileImg.setAttribute("src", exploredTiles[indexFinder(exploredTiles, blockCoordinates)].content)
                     tileImg.setAttribute("class", "tileimg")
                     targetBlock.appendChild(tileImg)
@@ -93,6 +94,7 @@ function renderGrid() {
                             return "assets/groundtilewithdude.png"
                         }
                     }
+                    targetBlock.innerHTML = ""
                     tileImg.setAttribute("src", tileContentGenerator())
                     tileImg.setAttribute("class", "tileimg")
                     targetBlock.appendChild(tileImg)
@@ -111,18 +113,38 @@ function renderGrid() {
 //Movement functions
 function left() {
     playerPosition[0] = playerPosition[0] - 1
+    renderGrid()
 }
 
 function right() {
-    playerPosition[0] = playerPosition[0] - 1
+    playerPosition[0] = playerPosition[0] + 1
+    renderGrid()
 }
 
 function up() {
     playerPosition[1] = playerPosition[1] + 1
+    renderGrid()
 }
 
 function down() {
     playerPosition[1] = playerPosition[1] - 1
+    renderGrid()
 }
 
 renderGrid()
+
+//Movement buttons
+document.addEventListener("click", function(){
+    if (event.target.getAttribute("id") === "left") {
+        left()
+    }
+    else if (event.target.getAttribute("id") === "right") {
+        right()
+    }
+    else if (event.target.getAttribute("id") === "up") {
+        up()
+    }
+    else if (event.target.getAttribute("id") === "down") {
+        down()
+    }
+})
