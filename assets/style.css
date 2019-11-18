@@ -1,0 +1,31 @@
+#title {
+    text-align: center;
+    font-size: 24px;
+    height: 10%;
+}
+
+.row {
+    width: 100%;
+}
+
+#gamegrid {
+    width: 360px;
+    margin: auto;
+}
+
+.gamegridrow {
+    height: 30px;
+    padding: 0px;
+    margin: 0px;
+}
+
+.gamegridcolumn {
+    width: 30px;
+    height: 100%;
+    float: left;
+}
+
+.tileimg {
+    height: 100%;
+    width: 100%;
+}
