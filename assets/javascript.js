@@ -1,5 +1,5 @@
 var playerPosition = [0,0]
-var exploredTiles
+var exploredTiles = []
 
 //Retreiving explored tiles array on page startup, or setting default values
 if (localStorage.getItem("exploredtiles") === null) {
@@ -256,17 +256,21 @@ function renderCombat() {
     clearBody()
     var combatScreen = document.createElement("div")
     combatScreen.setAttribute("class", "combatscreen")
-    combatScreen.textContent = "Combat isn't implemented yet, so let's just say you absolutely destroyed that bad guy"
+    combatScreen.textContent = "Combat isn't implemented yet, so let's just say that bad guy tripped and broke his neck."
     document.querySelector("body").appendChild(combatScreen)
+    var buttonWrapper = document.createElement("div")
+    buttonWrapper.setAttribute("class", "buttonwrapper")
+    document.querySelector("body").appendChild(buttonWrapper)
     var endCombatButton = document.createElement("button")
     endCombatButton.textContent = "Return to Map"
-    document.querySelector("body").appendChild(endCombatButton)
+    endCombatButton.setAttribute("class", "endencounterbutton")
+    buttonWrapper.appendChild(endCombatButton)
 }
 
 function renderItem() {
     saveBody()
     clearBody()
-    rng = Math.random()
+    var rng = Math.random()
     function generateItem() {
         if (rng < .1) {
             return "10 gp"
@@ -301,11 +305,15 @@ function renderItem() {
     }
     var itemScreen = document.createElement("div")
     itemScreen.setAttribute("class", "itemscreen")
-    itemScreen.textContent = "You found " + generateItem() + "! But you absent-mindedly drop the loot down a sewer grate. How unfortunate!"
+    itemScreen.textContent = "You found " + generateItem() + "! But since you have no sack, you'll just have to wait until inventory is implemented."
     document.querySelector("body").appendChild(itemScreen)
+    var buttonWrapper = document.createElement("div")
+    buttonWrapper.setAttribute("class", "buttonwrapper")
+    document.querySelector("body").appendChild(buttonWrapper)
     var endItemButton = document.createElement("button")
     endItemButton.textContent = "Return to Map"
-    document.querySelector("body").appendChild(endItemButton)
+    endItemButton.setAttribute("class", "endencounterbutton")
+    buttonWrapper.appendChild(endItemButton)
 }
 
 function endEncounter() {

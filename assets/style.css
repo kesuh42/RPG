@@ -35,3 +35,15 @@
     margin: auto;
     width: 181px;
 }
+
+.itemscreen {
+    text-align: center;
+}
+
+.combatscreen {
+    text-align: center;
+}
+
+.buttonwrapper {
+    text-align: center;
+}
