@@ -29,3 +29,8 @@
     height: 100%;
     width: 100%;
 }
+
+#movebuttons {
+    margin: auto;
+    width: 181px;
+}
