@@ -9,6 +9,14 @@ if (localStorage.getItem("exploredtiles") !== null) {
     exploredTiles = JSON.parse(localStorage.getItem("exploredtiles"))
 }
 
+//Retrieving player position
+if (localStorage.getItem("playerposition") === null) {
+    playerPosition = [0,0]
+}
+if (localStorage.getItem("playerposition") !== null) {
+    playerPosition = JSON.parse(localStorage.getItem("playerposition"))
+}
+
 function hexadecimalToDecimal(x) {
     if (x === "A") {
         return 10
@@ -114,38 +122,78 @@ function renderGrid() {
 function left() {
     playerPosition[0] = playerPosition[0] - 1
     renderGrid()
+    localStorage.setItem("playerposition", JSON.stringify(playerPosition))
 }
 
 function right() {
     playerPosition[0] = playerPosition[0] + 1
     renderGrid()
+    localStorage.setItem("playerposition", JSON.stringify(playerPosition))
+
 }
 
 function up() {
     playerPosition[1] = playerPosition[1] + 1
     renderGrid()
+    localStorage.setItem("playerposition", JSON.stringify(playerPosition))
+
 }
 
 function down() {
     playerPosition[1] = playerPosition[1] - 1
     renderGrid()
+    localStorage.setItem("playerposition", JSON.stringify(playerPosition))
+
 }
 
 renderGrid()
 
-//Movement buttons
+//Movement buttons, renders combat if movement 
 document.addEventListener("click", function(){
+    var combat = false
     if (event.target.getAttribute("id") === "left") {
+        var leftTileContent = document.getElementById("block67").childNodes[0].getAttribute("src")
+        if (leftTileContent === "assets/groundtilewithdude.png") {
+            combat = true
+        }
         left()
+        if (combat) {
+            renderCombat()
+            combat = false
+        }
     }
     else if (event.target.getAttribute("id") === "right") {
+        var rightTileContent = document.getElementById("block87").childNodes[0].getAttribute("src")
+        if (rightTileContent === "assets/groundtilewithdude.png") {
+            combat = true
+        }
         right()
+        if (combat) {
+            renderCombat()
+            combat = false
+        }
     }
     else if (event.target.getAttribute("id") === "up") {
+        var upTileContent = document.getElementById("block76").childNodes[0].getAttribute("src")
+        if (upTileContent === "assets/groundtilewithdude.png") {
+            combat = true
+        }
         up()
+        if (combat) {
+            renderCombat()
+            combat = false
+        }
     }
     else if (event.target.getAttribute("id") === "down") {
+        var downTileContent = document.getElementById("block78").childNodes[0].getAttribute("src")
+        if (downTileContent === "assets/groundtilewithdude.png") {
+            combat = true
+        }
         down()
+        if (combat) {
+            renderCombat()
+            combat = false
+        }
     }
 })
 
@@ -153,7 +201,9 @@ function clearBody() {
     document.querySelector("body").innerHTML = ""
 }
 
+//Probably should find a way to make this variable non-global
 var bodySnapshot
+
 function saveBody() {
     if (document.querySelector("body").innerHTML !== "") {
         bodySnapshot = document.querySelector("body").innerHTML
@@ -162,4 +212,12 @@ function saveBody() {
         console.log(bodySnapshot)
         document.querySelector("body").outerHTML = bodySnapshot
     }
+}
+
+function renderCombat() {
+    clearBody()
+    var combatScreen = document.createElement("div")
+    combatScreen.setAttribute("class", "combatscreen")
+    combatScreen.textContent = "working on it"
+    document.querySelector("body").appendChild(combatScreen)
 }
