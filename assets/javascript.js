@@ -17,6 +17,7 @@ if (localStorage.getItem("playerposition") !== null) {
     playerPosition = JSON.parse(localStorage.getItem("playerposition"))
 }
 
+//Converts hexadecimal div ids to numbers
 function hexadecimalToDecimal(x) {
     if (x === "A") {
         return 10
@@ -38,6 +39,23 @@ function hexadecimalToDecimal(x) {
     }
     else {
         return x
+    }
+}
+
+//With parameters exploredTiles and coordinates, finds the index of coordinates in exploredTiles
+function indexFinder(x, y) {
+    var index = 0
+    for (i of x) {
+        var xCoordinate = x[index].blockID[0]
+        var yCoordinate = x[index].blockID[1]
+        var xCoordinateCurrent = y[0]
+        var yCoordinateCurrent = y[1]
+        if (xCoordinate === xCoordinateCurrent && yCoordinate === yCoordinateCurrent) {
+            return index
+        }
+        else {
+            index++
+        }
     }
 }
 
@@ -70,22 +88,6 @@ function renderGrid() {
                 var blockCoordinatesString = JSON.stringify(blockCoordinates)
                 if (exploredCoordinatesArrayString.includes(blockCoordinatesString)) {
                     var tileImg = document.createElement("img")
-                    //need to find the index of the block in the explored tiles array
-                    function indexFinder(x, y) {
-                        var index = 0
-                        for (i of x) {
-                            var xCoordinate = x[index].blockID[0]
-                            var yCoordinate = x[index].blockID[1]
-                            var xCoordinateCurrent = y[0]
-                            var yCoordinateCurrent = y[1]
-                            if (xCoordinate === xCoordinateCurrent && yCoordinate === yCoordinateCurrent) {
-                                return index
-                            }
-                            else {
-                                index++
-                            }
-                        }
-                    }
                     targetBlock.innerHTML = ""
                     tileImg.setAttribute("src", exploredTiles[indexFinder(exploredTiles, blockCoordinates)].content)
                     tileImg.setAttribute("class", "tileimg")
@@ -95,11 +97,14 @@ function renderGrid() {
                     var tileImg = document.createElement("img")
                     function tileContentGenerator() {
                         var rng = Math.random()
-                        if (rng > .1) {
-                            return "assets/groundtile.png"
+                        if (rng < .1) {
+                            return "assets/groundtilewithdude.png"
+                        }
+                        else if (rng < .15 && rng > .1) {
+                            return "assets/lootbox.png"
                         }
                         else {
-                            return "assets/groundtilewithdude.png"
+                            return "assets/groundtile.png"
                         }
                     }
                     targetBlock.innerHTML = ""
@@ -151,15 +156,23 @@ renderGrid()
 //Movement buttons, renders combat if movement 
 document.addEventListener("click", function(){
     var combat = false
+    var item = false
     if (event.target.getAttribute("id") === "left") {
         var leftTileContent = document.getElementById("block67").childNodes[0].getAttribute("src")
         if (leftTileContent === "assets/groundtilewithdude.png") {
             combat = true
         }
+        else if (leftTileContent === "assets/lootbox.png") {
+            item = true
+        }
         left()
         if (combat) {
             renderCombat()
             combat = false
+        }
+        else if (item) {
+            renderItem()
+            item = false
         }
     }
     else if (event.target.getAttribute("id") === "right") {
@@ -167,10 +180,17 @@ document.addEventListener("click", function(){
         if (rightTileContent === "assets/groundtilewithdude.png") {
             combat = true
         }
+        else if (rightTileContent === "assets/lootbox.png") {
+            item = true
+        }
         right()
         if (combat) {
             renderCombat()
             combat = false
+        }
+        else if (item) {
+            renderItem()
+            item = false
         }
     }
     else if (event.target.getAttribute("id") === "up") {
@@ -178,10 +198,17 @@ document.addEventListener("click", function(){
         if (upTileContent === "assets/groundtilewithdude.png") {
             combat = true
         }
+        else if (upTileContent === "assets/lootbox.png") {
+            item = true
+        }
         up()
         if (combat) {
             renderCombat()
             combat = false
+        }
+        else if (item) {
+            renderItem()
+            item = false
         }
     }
     else if (event.target.getAttribute("id") === "down") {
@@ -189,11 +216,21 @@ document.addEventListener("click", function(){
         if (downTileContent === "assets/groundtilewithdude.png") {
             combat = true
         }
+        else if (downTileContent === "assets/lootbox.png") {
+            item = true
+        }
         down()
         if (combat) {
             renderCombat()
             combat = false
         }
+        else if (item) {
+            renderItem()
+            item = false
+        }
+    }
+    else if (event.target.textContent === "Return to Map") {
+        endEncounter()
     }
 })
 
@@ -205,19 +242,41 @@ function clearBody() {
 var bodySnapshot
 
 function saveBody() {
-    if (document.querySelector("body").innerHTML !== "") {
-        bodySnapshot = document.querySelector("body").innerHTML
-    }
-    else {
-        console.log(bodySnapshot)
-        document.querySelector("body").outerHTML = bodySnapshot
-    }
+    bodySnapshot = document.querySelector("body").innerHTML
+}
+
+function restoreBody() {
+    document.querySelector("body").outerHTML = bodySnapshot
 }
 
 function renderCombat() {
+    saveBody()
     clearBody()
     var combatScreen = document.createElement("div")
     combatScreen.setAttribute("class", "combatscreen")
-    combatScreen.textContent = "working on it"
+    combatScreen.textContent = "Combat isn't implemented yet, so let's just say you absolutely destroyed that bad guy"
     document.querySelector("body").appendChild(combatScreen)
+    var endCombatButton = document.createElement("button")
+    endCombatButton.textContent = "Return to Map"
+    document.querySelector("body").appendChild(endCombatButton)
+}
+
+function renderItem() {
+    saveBody()
+    clearBody()
+    var itemScreen = document.createElement("div")
+    itemScreen.setAttribute("class", "combatscreen")
+    itemScreen.textContent = "Items aren't implemented yet, so let's just say you opened the box and got nothing"
+    document.querySelector("body").appendChild(itemScreen)
+    var endItemButton = document.createElement("button")
+    endItemButton.textContent = "Return to Map"
+    document.querySelector("body").appendChild(endItemButton)
+}
+
+function endEncounter() {
+    //Replaces person tile with blank tile upon killing enemy
+    exploredTiles[indexFinder(exploredTiles, playerPosition)].content = "assets/groundtile.png"
+    localStorage.setItem("exploredtiles", JSON.stringify(exploredTiles))
+    //Returns to map
+    restoreBody()
 }
