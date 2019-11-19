@@ -148,3 +148,18 @@ document.addEventListener("click", function(){
         down()
     }
 })
+
+function clearBody() {
+    document.querySelector("body").innerHTML = ""
+}
+
+var bodySnapshot
+function saveBody() {
+    if (document.querySelector("body").innerHTML !== "") {
+        bodySnapshot = document.querySelector("body").innerHTML
+    }
+    else {
+        console.log(bodySnapshot)
+        document.querySelector("body").outerHTML = bodySnapshot
+    }
+}
