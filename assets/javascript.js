@@ -1,7 +1,7 @@
 var playerPosition = [0,0]
 var exploredTiles
 
-//Retreiving explored tiles array on page startup
+//Retreiving explored tiles array on page startup, or setting default values
 if (localStorage.getItem("exploredtiles") === null) {
     exploredTiles = []
 }
@@ -59,6 +59,7 @@ function indexFinder(x, y) {
     }
 }
 
+//Renders map grid
 function renderGrid() {
     for (i of [1,2,3,4,5,6,7,8,9,"A","B","C","D"]){
         var x = i
@@ -83,9 +84,10 @@ function renderGrid() {
                 for (i of exploredTiles) {
                     exploredCoordinatesArray.push(i.blockID)
                 }
-                //array comparison doesn't work, so will stringify here
+                //Array comparison doesn't work, so will stringify here
                 var exploredCoordinatesArrayString = JSON.stringify(exploredCoordinatesArray)
                 var blockCoordinatesString = JSON.stringify(blockCoordinates)
+                //If the coordinates have already been explored, pulls the tile type from the exploredTiles array
                 if (exploredCoordinatesArrayString.includes(blockCoordinatesString)) {
                     var tileImg = document.createElement("img")
                     targetBlock.innerHTML = ""
@@ -93,6 +95,7 @@ function renderGrid() {
                     tileImg.setAttribute("class", "tileimg")
                     targetBlock.appendChild(tileImg)
                 }
+                //Otherwise, randomly generates a new tile
                 else {
                     var tileImg = document.createElement("img")
                     function tileContentGenerator() {
@@ -121,7 +124,6 @@ function renderGrid() {
         }
     }
 }
-//Upon new exploration
 
 //Movement functions
 function left() {
@@ -153,7 +155,7 @@ function down() {
 
 renderGrid()
 
-//Movement buttons, renders combat if movement 
+//Movement buttons, renders combat or item screens accordingly
 document.addEventListener("click", function(){
     var combat = false
     var item = false
@@ -264,9 +266,42 @@ function renderCombat() {
 function renderItem() {
     saveBody()
     clearBody()
+    rng = Math.random()
+    function generateItem() {
+        if (rng < .1) {
+            return "10 gp"
+        }
+        else if (rng > .1 && rng < .2) {
+            return "20 gp"
+        }
+        else if (rng > .2 && rng < .3) {
+            return "30 gp"
+        }
+        else if (rng > .3 && rng < .4) {
+            return "40 gp"
+        }
+        else if (rng > .4 && rng < .5) {
+            return "50 gp"
+        }
+        else if (rng > .5 && rng < .6) {
+            return "60 gp"
+        }
+        else if (rng > .6 && rng < .7) {
+            return "70 gp"
+        }
+        else if (rng > .7 && rng < .8) {
+            return "80 gp"
+        }
+        else if (rng > .8 && rng < .9) {
+            return "90 gp"
+        }
+        else if (rng > .9 && rng < 1) {
+            return "100 gp"
+        }
+    }
     var itemScreen = document.createElement("div")
-    itemScreen.setAttribute("class", "combatscreen")
-    itemScreen.textContent = "Items aren't implemented yet, so let's just say you opened the box and got nothing"
+    itemScreen.setAttribute("class", "itemscreen")
+    itemScreen.textContent = "You found " + generateItem() + "! But you absent-mindedly drop the loot down a sewer grate. How unfortunate!"
     document.querySelector("body").appendChild(itemScreen)
     var endItemButton = document.createElement("button")
     endItemButton.textContent = "Return to Map"
