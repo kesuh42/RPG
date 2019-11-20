@@ -1,5 +1,6 @@
 var playerPosition = [0,0]
 var exploredTiles = []
+var playerStatus = {"inventory": [], "health": 10, "mana": 10}
 
 //Retreiving explored tiles array on page startup, or setting default values
 if (localStorage.getItem("exploredtiles") === null) {
@@ -15,6 +16,14 @@ if (localStorage.getItem("playerposition") === null) {
 }
 if (localStorage.getItem("playerposition") !== null) {
     playerPosition = JSON.parse(localStorage.getItem("playerposition"))
+}
+
+//Retrieving player status
+if (localStorage.getItem("playerstatus") === null) {
+    playerStatus = {"inventory": [], "health": 10, "mana": 10}
+}
+if (localStorage.getItem("playerstatus") !== null) {
+    playerStatus = JSON.parse(localStorage.getItem("playerstatus"))
 }
 
 //Converts hexadecimal div ids to numbers
